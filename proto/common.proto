@@ -15,16 +15,16 @@ message Model {
 
 message Review {
   Model model = 1;
-  int64 product_variant_id = 2;
-  int64 user_id = 3;
+  uint32 product_variant_id = 2;
+  uint32 user_id = 3;
   int32 rating = 4;
   string comment = 5;
 }
 
 message Question {
   Model model = 1;
-  int64 product_variant_id = 2;
-  int64 user_id = 3;
+  uint32 product_variant_id = 2;
+  uint32 user_id = 3;
   string question_text = 4;
   string answer_text = 5;
 }
