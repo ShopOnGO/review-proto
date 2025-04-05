@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package proto;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "./pkg/service";
+
+message Model {
+  uint32 id = 1;
+  google.protobuf.Timestamp created_at = 2;
+  google.protobuf.Timestamp updated_at = 3;
+  google.protobuf.Timestamp deleted_at = 4;
+}
+
+message Review {
+  Model model = 1;
+  int64 product_variant_id = 2;
+  int64 user_id = 3;
+  int32 rating = 4;
+  string comment = 5;
+}
+
+message Question {
+  Model model = 1;
+  int64 product_variant_id = 2;
+  int64 user_id = 3;
+  string question_text = 4;
+  string answer_text = 5;
+}
