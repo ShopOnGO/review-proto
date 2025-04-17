@@ -19,22 +19,14 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	ReviewService_AddReview_FullMethodName        = "/proto.ReviewService/AddReview"
-	ReviewService_GetReviews_FullMethodName       = "/proto.ReviewService/GetReviews"
-	ReviewService_UpdateReview_FullMethodName     = "/proto.ReviewService/UpdateReview"
-	ReviewService_DeleteReview_FullMethodName     = "/proto.ReviewService/DeleteReview"
-	ReviewService_GetAverageRating_FullMethodName = "/proto.ReviewService/GetAverageRating"
+	ReviewService_GetReviewsForProduct_FullMethodName = "/proto.ReviewService/GetReviewsForProduct"
 )
 
 // ReviewServiceClient is the client API for ReviewService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ReviewServiceClient interface {
-	AddReview(ctx context.Context, in *AddReviewRequest, opts ...grpc.CallOption) (*AddReviewResponse, error)
-	GetReviews(ctx context.Context, in *GetReviewsRequest, opts ...grpc.CallOption) (*GetReviewsResponse, error)
-	UpdateReview(ctx context.Context, in *UpdateReviewRequest, opts ...grpc.CallOption) (*UpdateReviewResponse, error)
-	DeleteReview(ctx context.Context, in *DeleteReviewRequest, opts ...grpc.CallOption) (*DeleteReviewResponse, error)
-	GetAverageRating(ctx context.Context, in *GetAverageRatingRequest, opts ...grpc.CallOption) (*GetAverageRatingResponse, error)
+	GetReviewsForProduct(ctx context.Context, in *GetReviewsRequest, opts ...grpc.CallOption) (*ReviewListResponse, error)
 }
 
 type reviewServiceClient struct {
@@ -45,50 +37,10 @@ func NewReviewServiceClient(cc grpc.ClientConnInterface) ReviewServiceClient {
 	return &reviewServiceClient{cc}
 }
 
-func (c *reviewServiceClient) AddReview(ctx context.Context, in *AddReviewRequest, opts ...grpc.CallOption) (*AddReviewResponse, error) {
+func (c *reviewServiceClient) GetReviewsForProduct(ctx context.Context, in *GetReviewsRequest, opts ...grpc.CallOption) (*ReviewListResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(AddReviewResponse)
-	err := c.cc.Invoke(ctx, ReviewService_AddReview_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *reviewServiceClient) GetReviews(ctx context.Context, in *GetReviewsRequest, opts ...grpc.CallOption) (*GetReviewsResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetReviewsResponse)
-	err := c.cc.Invoke(ctx, ReviewService_GetReviews_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *reviewServiceClient) UpdateReview(ctx context.Context, in *UpdateReviewRequest, opts ...grpc.CallOption) (*UpdateReviewResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(UpdateReviewResponse)
-	err := c.cc.Invoke(ctx, ReviewService_UpdateReview_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *reviewServiceClient) DeleteReview(ctx context.Context, in *DeleteReviewRequest, opts ...grpc.CallOption) (*DeleteReviewResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(DeleteReviewResponse)
-	err := c.cc.Invoke(ctx, ReviewService_DeleteReview_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *reviewServiceClient) GetAverageRating(ctx context.Context, in *GetAverageRatingRequest, opts ...grpc.CallOption) (*GetAverageRatingResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetAverageRatingResponse)
-	err := c.cc.Invoke(ctx, ReviewService_GetAverageRating_FullMethodName, in, out, cOpts...)
+	out := new(ReviewListResponse)
+	err := c.cc.Invoke(ctx, ReviewService_GetReviewsForProduct_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -99,11 +51,7 @@ func (c *reviewServiceClient) GetAverageRating(ctx context.Context, in *GetAvera
 // All implementations must embed UnimplementedReviewServiceServer
 // for forward compatibility.
 type ReviewServiceServer interface {
-	AddReview(context.Context, *AddReviewRequest) (*AddReviewResponse, error)
-	GetReviews(context.Context, *GetReviewsRequest) (*GetReviewsResponse, error)
-	UpdateReview(context.Context, *UpdateReviewRequest) (*UpdateReviewResponse, error)
-	DeleteReview(context.Context, *DeleteReviewRequest) (*DeleteReviewResponse, error)
-	GetAverageRating(context.Context, *GetAverageRatingRequest) (*GetAverageRatingResponse, error)
+	GetReviewsForProduct(context.Context, *GetReviewsRequest) (*ReviewListResponse, error)
 	mustEmbedUnimplementedReviewServiceServer()
 }
 
@@ -114,20 +62,8 @@ type ReviewServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedReviewServiceServer struct{}
 
-func (UnimplementedReviewServiceServer) AddReview(context.Context, *AddReviewRequest) (*AddReviewResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AddReview not implemented")
-}
-func (UnimplementedReviewServiceServer) GetReviews(context.Context, *GetReviewsRequest) (*GetReviewsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetReviews not implemented")
-}
-func (UnimplementedReviewServiceServer) UpdateReview(context.Context, *UpdateReviewRequest) (*UpdateReviewResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateReview not implemented")
-}
-func (UnimplementedReviewServiceServer) DeleteReview(context.Context, *DeleteReviewRequest) (*DeleteReviewResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteReview not implemented")
-}
-func (UnimplementedReviewServiceServer) GetAverageRating(context.Context, *GetAverageRatingRequest) (*GetAverageRatingResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetAverageRating not implemented")
+func (UnimplementedReviewServiceServer) GetReviewsForProduct(context.Context, *GetReviewsRequest) (*ReviewListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetReviewsForProduct not implemented")
 }
 func (UnimplementedReviewServiceServer) mustEmbedUnimplementedReviewServiceServer() {}
 func (UnimplementedReviewServiceServer) testEmbeddedByValue()                       {}
@@ -150,92 +86,20 @@ func RegisterReviewServiceServer(s grpc.ServiceRegistrar, srv ReviewServiceServe
 	s.RegisterService(&ReviewService_ServiceDesc, srv)
 }
 
-func _ReviewService_AddReview_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddReviewRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ReviewServiceServer).AddReview(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ReviewService_AddReview_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ReviewServiceServer).AddReview(ctx, req.(*AddReviewRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ReviewService_GetReviews_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ReviewService_GetReviewsForProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetReviewsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ReviewServiceServer).GetReviews(ctx, in)
+		return srv.(ReviewServiceServer).GetReviewsForProduct(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ReviewService_GetReviews_FullMethodName,
+		FullMethod: ReviewService_GetReviewsForProduct_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ReviewServiceServer).GetReviews(ctx, req.(*GetReviewsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ReviewService_UpdateReview_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateReviewRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ReviewServiceServer).UpdateReview(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ReviewService_UpdateReview_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ReviewServiceServer).UpdateReview(ctx, req.(*UpdateReviewRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ReviewService_DeleteReview_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteReviewRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ReviewServiceServer).DeleteReview(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ReviewService_DeleteReview_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ReviewServiceServer).DeleteReview(ctx, req.(*DeleteReviewRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ReviewService_GetAverageRating_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetAverageRatingRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ReviewServiceServer).GetAverageRating(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ReviewService_GetAverageRating_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ReviewServiceServer).GetAverageRating(ctx, req.(*GetAverageRatingRequest))
+		return srv.(ReviewServiceServer).GetReviewsForProduct(ctx, req.(*GetReviewsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -248,24 +112,8 @@ var ReviewService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ReviewServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "AddReview",
-			Handler:    _ReviewService_AddReview_Handler,
-		},
-		{
-			MethodName: "GetReviews",
-			Handler:    _ReviewService_GetReviews_Handler,
-		},
-		{
-			MethodName: "UpdateReview",
-			Handler:    _ReviewService_UpdateReview_Handler,
-		},
-		{
-			MethodName: "DeleteReview",
-			Handler:    _ReviewService_DeleteReview_Handler,
-		},
-		{
-			MethodName: "GetAverageRating",
-			Handler:    _ReviewService_GetAverageRating_Handler,
+			MethodName: "GetReviewsForProduct",
+			Handler:    _ReviewService_GetReviewsForProduct_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

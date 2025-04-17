@@ -19,20 +19,14 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	QuestionService_AddQuestion_FullMethodName    = "/proto.QuestionService/AddQuestion"
-	QuestionService_GetQuestions_FullMethodName   = "/proto.QuestionService/GetQuestions"
-	QuestionService_AnswerQuestion_FullMethodName = "/proto.QuestionService/AnswerQuestion"
-	QuestionService_DeleteQuestion_FullMethodName = "/proto.QuestionService/DeleteQuestion"
+	QuestionService_GetQuestionsForProduct_FullMethodName = "/proto.QuestionService/GetQuestionsForProduct"
 )
 
 // QuestionServiceClient is the client API for QuestionService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type QuestionServiceClient interface {
-	AddQuestion(ctx context.Context, in *AddQuestionRequest, opts ...grpc.CallOption) (*AddQuestionResponse, error)
-	GetQuestions(ctx context.Context, in *GetQuestionsRequest, opts ...grpc.CallOption) (*GetQuestionsResponse, error)
-	AnswerQuestion(ctx context.Context, in *AnswerQuestionRequest, opts ...grpc.CallOption) (*AnswerQuestionResponse, error)
-	DeleteQuestion(ctx context.Context, in *DeleteQuestionRequest, opts ...grpc.CallOption) (*DeleteQuestionResponse, error)
+	GetQuestionsForProduct(ctx context.Context, in *GetQuestionsRequest, opts ...grpc.CallOption) (*QuestionListResponse, error)
 }
 
 type questionServiceClient struct {
@@ -43,40 +37,10 @@ func NewQuestionServiceClient(cc grpc.ClientConnInterface) QuestionServiceClient
 	return &questionServiceClient{cc}
 }
 
-func (c *questionServiceClient) AddQuestion(ctx context.Context, in *AddQuestionRequest, opts ...grpc.CallOption) (*AddQuestionResponse, error) {
+func (c *questionServiceClient) GetQuestionsForProduct(ctx context.Context, in *GetQuestionsRequest, opts ...grpc.CallOption) (*QuestionListResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(AddQuestionResponse)
-	err := c.cc.Invoke(ctx, QuestionService_AddQuestion_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *questionServiceClient) GetQuestions(ctx context.Context, in *GetQuestionsRequest, opts ...grpc.CallOption) (*GetQuestionsResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetQuestionsResponse)
-	err := c.cc.Invoke(ctx, QuestionService_GetQuestions_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *questionServiceClient) AnswerQuestion(ctx context.Context, in *AnswerQuestionRequest, opts ...grpc.CallOption) (*AnswerQuestionResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(AnswerQuestionResponse)
-	err := c.cc.Invoke(ctx, QuestionService_AnswerQuestion_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *questionServiceClient) DeleteQuestion(ctx context.Context, in *DeleteQuestionRequest, opts ...grpc.CallOption) (*DeleteQuestionResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(DeleteQuestionResponse)
-	err := c.cc.Invoke(ctx, QuestionService_DeleteQuestion_FullMethodName, in, out, cOpts...)
+	out := new(QuestionListResponse)
+	err := c.cc.Invoke(ctx, QuestionService_GetQuestionsForProduct_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -87,10 +51,7 @@ func (c *questionServiceClient) DeleteQuestion(ctx context.Context, in *DeleteQu
 // All implementations must embed UnimplementedQuestionServiceServer
 // for forward compatibility.
 type QuestionServiceServer interface {
-	AddQuestion(context.Context, *AddQuestionRequest) (*AddQuestionResponse, error)
-	GetQuestions(context.Context, *GetQuestionsRequest) (*GetQuestionsResponse, error)
-	AnswerQuestion(context.Context, *AnswerQuestionRequest) (*AnswerQuestionResponse, error)
-	DeleteQuestion(context.Context, *DeleteQuestionRequest) (*DeleteQuestionResponse, error)
+	GetQuestionsForProduct(context.Context, *GetQuestionsRequest) (*QuestionListResponse, error)
 	mustEmbedUnimplementedQuestionServiceServer()
 }
 
@@ -101,17 +62,8 @@ type QuestionServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedQuestionServiceServer struct{}
 
-func (UnimplementedQuestionServiceServer) AddQuestion(context.Context, *AddQuestionRequest) (*AddQuestionResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AddQuestion not implemented")
-}
-func (UnimplementedQuestionServiceServer) GetQuestions(context.Context, *GetQuestionsRequest) (*GetQuestionsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetQuestions not implemented")
-}
-func (UnimplementedQuestionServiceServer) AnswerQuestion(context.Context, *AnswerQuestionRequest) (*AnswerQuestionResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AnswerQuestion not implemented")
-}
-func (UnimplementedQuestionServiceServer) DeleteQuestion(context.Context, *DeleteQuestionRequest) (*DeleteQuestionResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteQuestion not implemented")
+func (UnimplementedQuestionServiceServer) GetQuestionsForProduct(context.Context, *GetQuestionsRequest) (*QuestionListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetQuestionsForProduct not implemented")
 }
 func (UnimplementedQuestionServiceServer) mustEmbedUnimplementedQuestionServiceServer() {}
 func (UnimplementedQuestionServiceServer) testEmbeddedByValue()                         {}
@@ -134,74 +86,20 @@ func RegisterQuestionServiceServer(s grpc.ServiceRegistrar, srv QuestionServiceS
 	s.RegisterService(&QuestionService_ServiceDesc, srv)
 }
 
-func _QuestionService_AddQuestion_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddQuestionRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QuestionServiceServer).AddQuestion(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: QuestionService_AddQuestion_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuestionServiceServer).AddQuestion(ctx, req.(*AddQuestionRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _QuestionService_GetQuestions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _QuestionService_GetQuestionsForProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetQuestionsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QuestionServiceServer).GetQuestions(ctx, in)
+		return srv.(QuestionServiceServer).GetQuestionsForProduct(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: QuestionService_GetQuestions_FullMethodName,
+		FullMethod: QuestionService_GetQuestionsForProduct_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuestionServiceServer).GetQuestions(ctx, req.(*GetQuestionsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _QuestionService_AnswerQuestion_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AnswerQuestionRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QuestionServiceServer).AnswerQuestion(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: QuestionService_AnswerQuestion_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuestionServiceServer).AnswerQuestion(ctx, req.(*AnswerQuestionRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _QuestionService_DeleteQuestion_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteQuestionRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QuestionServiceServer).DeleteQuestion(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: QuestionService_DeleteQuestion_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuestionServiceServer).DeleteQuestion(ctx, req.(*DeleteQuestionRequest))
+		return srv.(QuestionServiceServer).GetQuestionsForProduct(ctx, req.(*GetQuestionsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -214,20 +112,8 @@ var QuestionService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*QuestionServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "AddQuestion",
-			Handler:    _QuestionService_AddQuestion_Handler,
-		},
-		{
-			MethodName: "GetQuestions",
-			Handler:    _QuestionService_GetQuestions_Handler,
-		},
-		{
-			MethodName: "AnswerQuestion",
-			Handler:    _QuestionService_AnswerQuestion_Handler,
-		},
-		{
-			MethodName: "DeleteQuestion",
-			Handler:    _QuestionService_DeleteQuestion_Handler,
+			MethodName: "GetQuestionsForProduct",
+			Handler:    _QuestionService_GetQuestionsForProduct_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
