@@ -24,7 +24,12 @@ message Review {
 message Question {
   Model model = 1;
   uint32 product_variant_id = 2;
-  uint32 user_id = 3;
-  string question_text = 4;
-  string answer_text = 5;
+
+  oneof author {
+    uint32 user_id = 3;
+    bytes guest_id = 4;
+  }
+
+  string question_text = 5;
+  string answer_text = 6;
 }
