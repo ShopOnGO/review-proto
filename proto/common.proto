@@ -15,7 +15,7 @@ message Model {
 
 message Review {
   Model model = 1;
-  uint32 product_variant_id = 2;
+  uint32 product_id = 2;
   uint32 user_id = 3;
   int32 rating = 4;
   int32 likes_count = 5;
@@ -24,7 +24,7 @@ message Review {
 
 message Question {
   Model model = 1;
-  uint32 product_variant_id = 2;
+  uint32 product_id = 2;
 
   oneof author {
     uint32 user_id = 3;
